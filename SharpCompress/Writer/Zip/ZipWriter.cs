@@ -6,10 +6,16 @@ using SharpCompress.Common;
 using SharpCompress.Common.Zip;
 using SharpCompress.Common.Zip.Headers;
 using SharpCompress.Compressor;
+#if BZIP2
 using SharpCompress.Compressor.BZip2;
+#endif
 using SharpCompress.Compressor.Deflate;
+#if LZMA
 using SharpCompress.Compressor.LZMA;
+#endif
+#if PPMd
 using SharpCompress.Compressor.PPMd;
+#endif
 using SharpCompress.IO;
 using DeflateStream = SharpCompress.Compressor.Deflate.DeflateStream;
 
@@ -24,7 +30,9 @@ namespace SharpCompress.Writer.Zip
         private readonly string zipComment;
         private long streamPosition;
 
+#if PPMd
         private readonly PpmdProperties ppmdProperties; // Caching properties to speed up PPMd.
+#endif
 
         public ZipWriter(Stream destination, CompressionInfo compressionInfo, string zipComment)
             : base(ArchiveType.Zip)
@@ -49,17 +57,21 @@ namespace SharpCompress.Writer.Zip
                         compression = ZipCompressionMethod.BZip2;
                     }
                     break;
+#if LZMA
                 case CompressionType.LZMA:
                     {
                         compression = ZipCompressionMethod.LZMA;
                     }
                     break;
+#endif
+#if PPMd
                 case CompressionType.PPMd:
                     {
                         ppmdProperties = new PpmdProperties();
                         compression = ZipCompressionMethod.PPMd;
                     }
                     break;
+#endif
                 default:
                     throw new InvalidFormatException("Invalid compression method: " + compressionInfo.Type);
             }
@@ -231,10 +243,13 @@ namespace SharpCompress.Writer.Zip
                             return new DeflateStream(counting, CompressionMode.Compress, writer.deflateCompressionLevel,
                                                      true);
                         }
+#if BZIP2
                     case ZipCompressionMethod.BZip2:
                         {
                             return new BZip2Stream(counting, CompressionMode.Compress, true);
                         }
+#endif
+#if LZMA
                     case ZipCompressionMethod.LZMA:
                         {
                             counting.WriteByte(9);
@@ -247,11 +262,14 @@ namespace SharpCompress.Writer.Zip
                             counting.Write(lzmaStream.Properties, 0, lzmaStream.Properties.Length);
                             return lzmaStream;
                         }
+#endif
+#if PPMd
                     case ZipCompressionMethod.PPMd:
                         {
                             counting.Write(writer.ppmdProperties.Properties, 0, 2);
                             return new PpmdStream(writer.ppmdProperties, counting, true);
                         }
+#endif
                     default:
                         {
                             throw new NotSupportedException("CompressionMethod: " + writer.compression);

@@ -4,7 +4,9 @@ using SharpCompress.Common;
 using SharpCompress.Common.Tar.Headers;
 using SharpCompress.Compressor;
 using SharpCompress.Compressor.BZip2;
+#if DEFLATE
 using SharpCompress.Compressor.Deflate;
+#endif
 
 namespace SharpCompress.Writer.Tar
 {

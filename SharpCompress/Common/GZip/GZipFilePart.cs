@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+#if TAR
 using SharpCompress.Common.Tar.Headers;
+#endif
 using SharpCompress.Compressor;
 using SharpCompress.Compressor.Deflate;
 
@@ -51,7 +53,9 @@ namespace SharpCompress.Common.GZip
                 throw new ZlibException("Bad GZIP header.");
 
             Int32 timet = BitConverter.ToInt32(header, 4);
+#if TAR
             DateModified = TarHeader.Epoch.AddSeconds(timet);
+#endif
             if ((header[3] & 0x04) == 0x04)
             {
                 // read and discard extra field

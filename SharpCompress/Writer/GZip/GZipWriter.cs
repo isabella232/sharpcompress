@@ -1,9 +1,13 @@
 ﻿using System;
 using System.IO;
 using SharpCompress.Common;
+#if TAR
 using SharpCompress.Common.Tar.Headers;
+#endif
+#if DEFLATE
 using SharpCompress.Compressor;
 using SharpCompress.Compressor.Deflate;
+#endif
 
 namespace SharpCompress.Writer.GZip
 {

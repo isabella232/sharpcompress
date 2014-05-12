@@ -792,6 +792,7 @@ namespace SharpCompress.Compressor.PPMd.H
                 updateModel();
         }
 
+#if LZMA
         public int decodeChar(LZMA.RangeCoder.Decoder decoder)
         {
             if (minContext.NumStats != 1)
@@ -924,5 +925,6 @@ namespace SharpCompress.Compressor.PPMd.H
                 } while (i != 0);
             }
         }
+#endif
     }
 }

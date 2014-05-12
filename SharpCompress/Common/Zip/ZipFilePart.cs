@@ -3,10 +3,18 @@ using System.IO;
 using System.Linq;
 using SharpCompress.Common.Zip.Headers;
 using SharpCompress.Compressor;
+#if BZIP2
 using SharpCompress.Compressor.BZip2;
+#endif
+#if DEFLATE
 using SharpCompress.Compressor.Deflate;
+#endif
+#if LZMA
 using SharpCompress.Compressor.LZMA;
+#endif
+#if PPMd
 using SharpCompress.Compressor.PPMd;
+#endif
 using SharpCompress.IO;
 
 namespace SharpCompress.Common.Zip
@@ -71,10 +79,13 @@ namespace SharpCompress.Common.Zip
                     {
                         return new DeflateStream(stream, CompressionMode.Decompress);
                     }
+#if BZIP2
                 case ZipCompressionMethod.BZip2:
                     {
                         return new BZip2Stream(stream, CompressionMode.Decompress);
                     }
+#endif
+#if LZMA
                 case ZipCompressionMethod.LZMA:
                     {
                         if (FlagUtility.HasFlag(Header.Flags, HeaderFlags.Encrypted))
@@ -91,12 +102,15 @@ namespace SharpCompress.Common.Zip
                                                   ? -1
                                                   : (long)Header.UncompressedSize);
                     }
+#endif
+#if PPMd
                 case ZipCompressionMethod.PPMd:
                     {
                         var props = new byte[2];
                         stream.Read(props, 0, props.Length);
                         return new PpmdStream(new PpmdProperties(props), stream, false);
                     }
+#endif
                 case ZipCompressionMethod.WinzipAes:
                     {
                         ExtraData data = Header.Extra.Where(x => x.Type == ExtraDataType.WinZipAes).SingleOrDefault();

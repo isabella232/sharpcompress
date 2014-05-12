@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+#if GZIP
 using SharpCompress.Archive.GZip;
+#endif
 using SharpCompress.Archive.Tar;
 using SharpCompress.Common;
 using SharpCompress.Common.Tar;
-using SharpCompress.Compressor;
+#if BZIP2
 using SharpCompress.Compressor.BZip2;
+#endif
+#if BZIP2
 using SharpCompress.Compressor.Deflate;
+#endif
 using SharpCompress.IO;
 
 namespace SharpCompress.Reader.Tar
@@ -35,14 +40,18 @@ namespace SharpCompress.Reader.Tar
             var stream = base.RequestInitialStream();
             switch (compressionType)
             {
+#if BZIP2
                 case CompressionType.BZip2:
                     {
                         return new BZip2Stream(stream, CompressionMode.Decompress, false);
                     }
+#endif
+#if GZIP
                 case CompressionType.GZip:
                     {
                         return new GZipStream(stream, CompressionMode.Decompress);
                     }
+#endif
                 case CompressionType.None:
                     {
                         return stream;
@@ -68,6 +77,7 @@ namespace SharpCompress.Reader.Tar
 
             RewindableStream rewindableStream = new RewindableStream(stream);
             rewindableStream.StartRecording();
+#if GZIP
             if (GZipArchive.IsGZipFile(rewindableStream))
             {
                 rewindableStream.Rewind(false);
@@ -79,7 +89,9 @@ namespace SharpCompress.Reader.Tar
                 }
                 throw new InvalidFormatException("Not a tar file.");
             }
+#endif
 
+#if BZIP2
             rewindableStream.Rewind(false);
             if (BZip2Stream.IsBZip2(rewindableStream))
             {
@@ -95,6 +107,7 @@ namespace SharpCompress.Reader.Tar
             rewindableStream.Rewind(true);
             return new TarReader(rewindableStream, CompressionType.None, options);
         }
+#endif
 
         #endregion
 

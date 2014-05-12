@@ -1,8 +1,12 @@
 ﻿using System;
 using System.IO;
 using SharpCompress.Common;
+#if GZIP
 using SharpCompress.Writer.GZip;
+#endif
+#if TAR
 using SharpCompress.Writer.Tar;
+#endif
 using SharpCompress.Writer.Zip;
 
 namespace SharpCompress.Writer
@@ -21,6 +25,7 @@ namespace SharpCompress.Writer
         {
             switch (archiveType)
             {
+#if GZIP
                 case ArchiveType.GZip:
                     {
                         if (compressionInfo.Type != CompressionType.GZip)
@@ -29,14 +34,17 @@ namespace SharpCompress.Writer
                         }
                         return new GZipWriter(stream);
                     }
+#endif
                 case ArchiveType.Zip:
                     {
                         return new ZipWriter(stream, compressionInfo, null);
                     }
+#if TAR
                 case ArchiveType.Tar:
                     {
                         return new TarWriter(stream, compressionInfo);
                     }
+#endif
                 default:
                     {
                         throw new NotSupportedException("Archive Type does not have a Writer: " + archiveType);
