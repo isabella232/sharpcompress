@@ -41,6 +41,7 @@ namespace SharpCompress.Common.GZip
         public override DateTime? LastModifiedTime
         {
             get { return filePart.DateModified; }
+            set { throw new NotImplementedException(); }
         }
 
         public override DateTime? CreatedTime

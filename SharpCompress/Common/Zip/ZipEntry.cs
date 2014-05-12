@@ -7,7 +7,7 @@ namespace SharpCompress.Common.Zip
     public class ZipEntry : Entry
     {
         private readonly ZipFilePart filePart;
-        private readonly DateTime? lastModifiedTime;
+        private DateTime? lastModifiedTime;
 
         internal ZipEntry(ZipFilePart filePart)
         {
@@ -76,6 +76,7 @@ namespace SharpCompress.Common.Zip
         public override DateTime? LastModifiedTime
         {
             get { return lastModifiedTime; }
+            set { lastModifiedTime = value; }
         }
 
         public override DateTime? CreatedTime

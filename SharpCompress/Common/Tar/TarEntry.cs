@@ -45,6 +45,7 @@ namespace SharpCompress.Common.Tar
         public override DateTime? LastModifiedTime
         {
             get { return filePart.Header.LastModifiedTime; }
+            set { throw new NotImplementedException(); }
         }
 
         public override DateTime? CreatedTime

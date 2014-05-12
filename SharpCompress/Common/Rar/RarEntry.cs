@@ -29,6 +29,7 @@ namespace SharpCompress.Common.Rar
         public override DateTime? LastModifiedTime
         {
             get { return FileHeader.FileLastModifiedTime; }
+            set { throw new NotImplementedException(); }
         }
 
         /// <summary>

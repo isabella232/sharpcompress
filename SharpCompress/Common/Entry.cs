@@ -33,7 +33,7 @@ namespace SharpCompress.Common
         /// <summary>
         /// The entry last modified time in the archive, if recorded
         /// </summary>
-        public abstract DateTime? LastModifiedTime { get; }
+        public abstract DateTime? LastModifiedTime { get; set; }
 
         /// <summary>
         /// The entry create time in the archive, if recorded

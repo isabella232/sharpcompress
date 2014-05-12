@@ -14,7 +14,7 @@ namespace SharpCompress.Common
         bool IsEncrypted { get; }
         bool IsSplit { get; }
         DateTime? LastAccessedTime { get; }
-        DateTime? LastModifiedTime { get; }
+        DateTime? LastModifiedTime { get; set; }
         long Size { get; }
     }
 }
