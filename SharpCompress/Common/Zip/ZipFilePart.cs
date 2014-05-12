@@ -77,7 +77,8 @@ namespace SharpCompress.Common.Zip
                     }
                 case ZipCompressionMethod.Deflate:
                     {
-                        return new DeflateStream(stream, CompressionMode.Decompress);
+                        return new System.IO.Compression.DeflateStream(stream,
+                            System.IO.Compression.CompressionMode.Decompress);
                     }
 #if BZIP2
                 case ZipCompressionMethod.BZip2:

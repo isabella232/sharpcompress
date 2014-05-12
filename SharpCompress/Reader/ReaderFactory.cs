@@ -26,7 +26,9 @@ using SharpCompress.Reader.Rar;
 using SharpCompress.Reader.Tar;
 #endif
 using SharpCompress.Reader.Zip;
+#if DEFLATE
 using GZipStream = SharpCompress.Compressor.Deflate.GZipStream;
+#endif
 
 namespace SharpCompress.Reader
 {

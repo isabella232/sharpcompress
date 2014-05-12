@@ -17,7 +17,9 @@ using SharpCompress.Compressor.LZMA;
 using SharpCompress.Compressor.PPMd;
 #endif
 using SharpCompress.IO;
+#if DEFLATE
 using DeflateStream = SharpCompress.Compressor.Deflate.DeflateStream;
+#endif
 
 namespace SharpCompress.Writer.Zip
 {
@@ -240,8 +242,8 @@ namespace SharpCompress.Writer.Zip
                         }
                     case ZipCompressionMethod.Deflate:
                         {
-                            return new DeflateStream(counting, CompressionMode.Compress, writer.deflateCompressionLevel,
-                                                     true);
+                            return new System.IO.Compression.DeflateStream(counting,
+                                System.IO.Compression.CompressionMode.Compress, true);
                         }
 #if BZIP2
                     case ZipCompressionMethod.BZip2:

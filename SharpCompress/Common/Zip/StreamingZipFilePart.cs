@@ -1,6 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.IO.Compression;
 using SharpCompress.Common.Zip.Headers;
-using SharpCompress.Compressor.Deflate;
 using SharpCompress.IO;
 
 namespace SharpCompress.Common.Zip
@@ -50,7 +51,7 @@ namespace SharpCompress.Common.Zip
                 DeflateStream deflateStream = decompressionStream as DeflateStream;
                 if (deflateStream != null)
                 {
-                    rewindableStream.Rewind(deflateStream.InputBuffer);
+                    rewindableStream.Rewind(deflateStream.BaseStream as MemoryStream);
                 }
             }
             var reader = new BinaryReader(rewindableStream);
